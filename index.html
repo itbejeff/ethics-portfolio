@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artifact Portfolio</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: #0f0f0f;
+      color: #f2f2f2;
+      line-height: 1.6;
+      overflow-y: hidden;
+    }
+
+    body.unlocked {
+      overflow-y: auto;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #f2f2f2;
+      border-radius: 6px;
+    }
+
+    section {
+      padding: 60px 10%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .divider {
+      width: 100%;
+      height: 20px;
+      background-color: #000;
+    }
+
+    .spacer {
+      width: 100%;
+      height: 50px;
+      background-color: #000;
+      opacity: 0%;
+    }
+
+    /* ======================
+       TITLE SECTION
+       ====================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      transition:
+        min-height 1s cubic-bezier(0.22, 1, 0.36, 1),
+        padding 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body.unlocked .hero {
+      min-height: 70vh;
+      padding-bottom: 120px;
+    }
+
+    .hero-content {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 45px 55px;
+      border-radius: 20px;
+      max-width: 900px;
+      z-index: 2;
+      transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateY(-60px)
+    }
+
+    body.unlocked .hero-content {
+      transform: scale(0.95);
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      margin-bottom: 15px;
+      /*color: #737373;*/
+    }
+
+    .hero h2 {
+      font-size: 1.6rem;
+      font-weight: normal;
+      color: #bbbbbb;
+    }
+
+    /* ======================
+       SCROLL ARROWS
+       ====================== */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 35px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+    }
+
+      
+    .chevron {
+      position: relative;
+      width: 120px;
+      height: 14px;
+    }
+    
+    .chevron span {
+      position: absolute;
+      width: 120px;
+      height: 6px;
+      background-color: #f2f2f2;
+      border-radius: 0px;
+      opacity: 0.5;
+    }
+    .chevron .left {
+      transform: rotate(25deg) translateX(-26.5px) translateY(70px);
+      left: 0;
+    }
+    .chevron .right {
+      transform: rotate(-25deg) translateX(26.5px) translateY(70px);
+      right: 0;
+    }
+    .cheveron-wrapper {
+        position: absolute;
+        z-index: 1;
+    }
+    .box {
+      position: relative;
+      width: 250px;
+      height: 140px;
+      background-color: #f2f2f2;
+      border-radius: 3px;
+      opacity: 0.0;
+      cursor: pointer;
+      pointer-events: auto; 
+      z-index: 2;
+    }
+
+    .box.disabled {
+      cursor: default;
+      pointer-events: none;
+    }
+
+
+    .box .fix  {
+        transform: translateX(150px) translateY(70px);
+    }
+    
+    .scroll-indicator:hover .chevron span {
+      opacity: 1;
+    
+    }
+
+    .scroll-indicator.hide {
+      opacity: 0;
+      transform: translateY(30px);
+      pointer-events: none;
+    }
+
+    /* ======================
+       ARTIFACT SECTIONS
+       ====================== */
+    .content {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 75px;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 40px;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+    .opposite {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 75px;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 40px;
+      justify-content: space-between;
+      overflow: hidden;
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+
+    .center {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 75px;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 40px;
+      justify-content: space-between;
+      overflow: hidden;
+      flex-direction: center;
+      text-align: center;
+    }
+    .title-center {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 75px;
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 40px;
+      justify-content: space-between;
+      overflow: hidden;
+      flex-direction: center;
+      text-align: center;
+    }
+    .text {
+      flex: 1 1 60%;
+    }
+
+    .text > * {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: transform 0.9s ease, opacity 0.9s ease;
+    }
+    
+    .text.show h1 {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0s;
+      font-size: 3.2rem;
+      margin-bottom: 15px;
+    }
+    .text.show h2 {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0s;
+      font-size: 1.6rem;
+      margin-bottom: 15px;
+    }
+    .text.show h3 {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0s;
+    }
+
+    .text.show p,
+    .text.show ol {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.5s;
+      padding-right: 100px;
+    }
+
+
+    .opposite .text > * {
+      transform: translateX(50px); 
+    }
+
+    .opposite .text.show h3,
+    .opposite .text.show h2,    
+    .opposite .text.show h1,
+    .opposite .text.show p,
+    .opposite .text.show ol {
+      transform: translateX(0);
+      padding-right: 0px;
+      padding-left: 100px;
+    }
+
+    .center .text > * {
+      transform: translateY(-50px); 
+    }
+    .center .text.show p {
+      transition-delay: 0s;
+    }
+    .center .text.show h3,
+    .center .text.show h2,
+    .center .text.show h1,
+    .center .text.show p,
+    .center .text.show ol {
+      transform: translateX(0);
+      padding-right: 0px;
+    }
+
+    .title-center .text > * {
+      transform: translateY(-50px); 
+    }
+
+    .title-center .text.show h3,
+    .title-center .text.show h2,
+    .title-center .text.show h1,
+    .title-center .text.show p,
+    .title-center .text.show ol {
+      transform: translateX(0);
+      padding-right: 0px;
+    }
+
+    .images {
+      flex: 0 0 40%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .images img {
+      width: 250%;
+      max-width: 3000px;
+      opacity: 0;
+      transform: translateY(-50px);
+      transition: transform 1s ease, opacity 1s ease;
+    }
+
+    .images.show img {
+      opacity: 1;
+      transform: translateX(0);
+      transition-delay: 0.1s;
+    }
+
+    .images.center-image {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bibliography li {
+      margin-bottom: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      section {
+        padding: 40px 5%;
+      }
+
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+
+      .hero h2 {
+        font-size: 1.2rem;
+      }
+
+      .content {
+        flex-direction: column;
+      }
+
+      .images {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TITLE -->
+  <section class="hero" style="background-image: url('bg1.jpg');">
+    <div class="hero-content">
+      <h1>Should A.I. Be Allowed to Replace Human Employees?</h1>
+      <h2>Ethics Project - Jesse Dorsing</h2>
+    </div>
+
+    <div class="scroll-indicator" id="scrollBtn">
+      <div class="box"><span class="fix"></span><span class="fix"></span></div>
+      <div class="cheveron-wrapper">
+        <div class="chevron"><span class="left"></span><span class="right"></span></div>
+        <div class="chevron"><span class="left"></span><span class="right"></span></div>
+        <div class="chevron"><span class="left"></span><span class="right"></span></div>    
+      </div>
+    </div> 
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ARTIFACT 1 -->
+   
+  <section style="background-image: url('bg2.jpg');">
+    <div class="title-center">
+      <div class="text">
+        <h1>EQ#1 : What is your ethical dilemma?</h1>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="center">
+      <div class="text">
+        <p>My ethical dillema is if AI should be allowed to replace human employees in various jobs. Below are some arguments that both sides present.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div class="content">
+      <div class="images">
+        <img src="image1.jpg" alt="Image 1">
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ARTIFACT 2 -->
+  <section style="background-image: url('bg3.jpg');">
+    <div class="title-center">
+      <div class="text">
+        <h1>EQ#2 : Who/what does this ethical dilemma have the biggest effect on?</h1>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="center">
+      <div class="text">
+        <p>My ethical dillema affects everyone in some way, because it affects all employed people. However, some are affected more than others. Here are some of the most impacted groups.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="content">
+      <div class="text">
+        <h2>1. Minimum Wage Workers (Retail, Fast Food, Etc.)</h2>
+        <p>Jobs that mostly involve taking orders and operating registers have already started to be automated at a mass scale, with companies like Wendy’s, Burger King, KFC, and Taco Bell already using artificial intelligence in drive-thrus.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+
+    <div class="content">
+      <div class="text">
+        <h2>2. Office Jobs (Sales, Accounting, Etc.)</h2>
+        <p>Office jobs typically have employees complete very repetitive tasks. These tasks usually follow very strict patterns. As a result, artificial intelligence can easily automate most of this work.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    
+    <div class="content">
+      <div class="text">
+        <h2>3. Higher level corporate positions</h2>
+        <p>At the highest level of the corporate ladder are the people who are making tons of money due to the artificial intelligence job crisis lowering the cost of employees, and the artificial intelligence outperforming the humans.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ARTIFACT 3 -->
+  <section style="background-image: url('bg4.jpg');">
+    <div class="title-center">
+      <div class="text">
+        <h1>EQ#4 : What are the possible negative outcomes and the possible positive outcomes for the best solution to this ethical dilemma?</h1>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+    <div class="spacer"></div>
+
+    <div class="center">
+      <div class="text">
+        <p>The best possible solution, in my opinion, would be to allow AI to be used to assist human employees, but not replace them. Below are some positives and negatives of this solution.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    
+    <div class="center">
+      <div class="text">
+        <h2>Positives</h2>
+        <p>&#x2022; Increased Productivity in Work</p>
+        <p>&#x2022; Jobs being made by AI while not having AI replace jobs also</p>
+        <p>&#x2022; AI will improve the quality of work being done by the humans it is assisting</p>
+      </div>
+    </div>
+    
+    <div class="center">
+      <div class="text">
+        <h2>Negatives</h2>
+        <p>&#x2022; General downsides of AI</p>
+        <p>&#x2022; AI uses a lot of water to cool data centers</p>
+        <p>&#x2022; AI is causing a major shortage of computer parts, leading to lower stock and higher prices of things like phones and gaming consoles</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BIBLIOGRAPHY -->
+  <section style="background-image: url('bg6.jpg');">
+    <div class="content">
+      <div class="text">
+        <h3>Bibliography</h3>
+        <p>Talmage-Rostron, M. (2025, June 29). How Will Artificial Intelligence Affect Jobs 2023-2030. Nexford University; Nexford University. https://www.nexford.edu/insights/how-will-ai-affect-jobs</p>
+        <p>Prestianni, T. (2025, May 30). 59 AI Job Statistics: Future of U.S. Jobs. National University. https://www.nu.edu/blog/ai-job-statistics/</p>
+        <p>Urwin, M. (2025, May 15). AI Taking over Jobs: What to Know about the Future of Jobs. Built In. https://builtin.com/artificial-intelligence/ai-replacing-jobs-creating-jobs</p>
+        <p>What Jobs Will AI Replace? A Guide to Staying Relevant at Work. (2025). Turingcollege.com. https://www.turingcollege.com/blog/what-jobs-will-ai-replace</p>
+        <p>Understanding Which Jobs AI Might Replace. (n.d.). Mailchimp. https://mailchimp.com/resources/what-jobs-will-ai-replace/</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+
+    //<!--Fixing locking on reload-->
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    //<!--Scroll button-->
+    const scrollBtn = document.getElementById('scrollBtn');
+    const scrollBox = scrollBtn.querySelector('.box');
+
+    scrollBox.addEventListener('click', () => {
+      document.body.classList.add('unlocked');
+      scrollBtn.classList.add('hide');
+      scrollBox.classList.add('disabled');
+    });
+
+
+
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          const text = entry.target.querySelector('.text');
+          const images = entry.target.querySelector('.images');
+
+          if (entry.isIntersecting) {
+            if (text) text.classList.add('show');
+            if (images) images.classList.add('show');
+          } else {
+            if (text) text.classList.remove('show');
+            if (images) images.classList.remove('show');
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    document.querySelectorAll('.content').forEach(el => observer.observe(el));
+    document.querySelectorAll('.opposite').forEach(el => observer.observe(el));
+    document.querySelectorAll('.center').forEach(el => observer.observe(el));
+    document.querySelectorAll('.title-center').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
